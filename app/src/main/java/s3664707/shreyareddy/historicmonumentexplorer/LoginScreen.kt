@@ -1,10 +1,9 @@
 package s3664707.shreyareddy.historicmonumentexplorer
 
-
-import android.app.Activity
-import android.content.Context
+import kotlin.jvm.java
 import android.widget.Toast
-import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,13 +12,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -31,161 +31,201 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.google.firebase.database.FirebaseDatabase
+
+@Preview(showBackground = true)
+@Composable
+fun LoginScreenPreview() {
+    LoginScreen(navController = NavHostController(LocalContext.current))
+}
 
 
 @Composable
-fun LoginScreen( onLoginSuccess: () -> Unit,
-                 onRegisterClick: () -> Unit) {
-    var eventGuestName by remember { mutableStateOf("") }
-    var eventGuestPin by remember { mutableStateOf("") }
+fun LoginScreen(navController: NavHostController) {
+    var accEmail by remember { mutableStateOf("") }
+    var accPassword by remember { mutableStateOf("") }
 
-    val currentActivity = LocalContext.current as Activity
+    val context = LocalContext.current.findActivity()
 
+    val context1 = LocalContext.current
+
+    var passwordVisible by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .background(color = colorResource(id = R.color.white)),
     ) {
 
-        Spacer(modifier = Modifier.weight(1f))
-
-        Image(
-            modifier = Modifier
-                .size(100.dp)
-                .align(Alignment.CenterHorizontally),
-            painter = painterResource(id = R.drawable.bmi_logo),
-            contentDescription = "BMI Calculator"
-        )
-
-        Spacer(modifier = Modifier.weight(1f))
-
-        Text(
-            text = "Login",
-            style = MaterialTheme.typography.headlineLarge.copy(fontWeight = FontWeight.Bold),
-            modifier = Modifier.padding(bottom = 32.dp).align(Alignment.CenterHorizontally)
-        )
-
-        OutlinedTextField(
-            modifier = Modifier.fillMaxWidth(),
-            value = eventGuestName,
-            onValueChange = { eventGuestName = it },
-            label = { Text("Enter Registered E-Mail") },
-            leadingIcon = {
-                Icon(
-                    imageVector = Icons.Default.Email,
-                    contentDescription = "Email Icon"
-                )
-            },
-        )
-
-        Spacer(modifier = Modifier.height(6.dp))
-
-        OutlinedTextField(
-            modifier = Modifier.fillMaxWidth(),
-            value = eventGuestPin,
-            onValueChange = { eventGuestPin = it },
-            label = { Text("Enter Password") },
-            leadingIcon = {
-                Icon(
-                    imageVector = Icons.Default.Lock,
-                    contentDescription = "Password Icon"
-                )
-            },
-        )
-
-        Spacer(modifier = Modifier.height(36.dp))
-
-        Button(
-            onClick = {
-                when{
-                    eventGuestName.isEmpty() -> {
-                        Toast.makeText(currentActivity, " Please Enter Mail", Toast.LENGTH_SHORT).show()
-                    }
-                    eventGuestPin.isEmpty() -> {
-                        Toast.makeText(currentActivity, " Please Enter Password", Toast.LENGTH_SHORT).show()
-                    }
-                    else -> {
-                        signInWithuseremail(eventGuestName, eventGuestPin, currentActivity,onLoginSuccess)
-                    }
-
-                }
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(12.dp, 0.dp),
-            shape = RoundedCornerShape(8.dp)
+        Column(
+            modifier = Modifier.padding(16.dp),
+//            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text("Login")
-        }
 
-        Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(100.dp))
 
-
-        Row(
-            modifier = Modifier.align(alignment = Alignment.CenterHorizontally)
-        ) {
             Text(
-                text = "I'm an New User / ",
-                style = MaterialTheme.typography.bodyLarge,
+                text = "Login",
+                color = colorResource(id = R.color.p1),
+                style = MaterialTheme.typography.headlineLarge.copy(fontWeight = FontWeight.Bold),
+                modifier = Modifier
+                    .padding(bottom = 4.dp)
+                    .align(Alignment.CenterHorizontally)
             )
 
             Text(
-                text = "Register Now",
-                style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Black),
-                modifier = Modifier.clickable {
-                    onRegisterClick.invoke()
-                }
+                text = "Hello, Welcome Back!",
+                color = colorResource(id = R.color.p1),
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier
+                    .padding(bottom = 32.dp)
+                    .align(Alignment.CenterHorizontally)
             )
 
-        }
+            Column(
+                modifier = Modifier
+                    .background(
+                        color = colorResource(id = R.color.white),
+                        shape = RoundedCornerShape(8.dp)
+                    )
+                    .border(
+                        width = 1.dp,
+                        color = colorResource(id = R.color.white),
+                        shape = RoundedCornerShape(6.dp)
+                    )
+                    .padding(16.dp),
 
-        Spacer(modifier = Modifier.weight(1f))
+                )
+            {
 
-    }
+                Text(
+                    text = "EmailId",
+                    color = colorResource(id = R.color.black),
+                    style = MaterialTheme.typography.bodyMedium,
+                )
+                Spacer(modifier = Modifier.height(4.dp))
 
-}
+                OutlinedTextField(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    value = accEmail,
+                    onValueChange = { accEmail = it }
+                )
+                Spacer(modifier = Modifier.height(8.dp))
 
-private fun signInWithuseremail(useremail: String, userpassword: String, currentActivity: Activity,onLoginSuccess: () -> Unit) {
 
-    val databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(useremail.replace(".", ","))
+                Text(
+                    text = "Password",
+                    color = colorResource(id = R.color.black),
+                    style = MaterialTheme.typography.bodyMedium,
+                )
+                Spacer(modifier = Modifier.height(4.dp))
 
-    databaseReference.get().addOnCompleteListener { task ->
-        if (task.isSuccessful) {
-            val userData = task.result?.getValue(UserData::class.java)
-            if (userData != null) {
-                if (userData.password == userpassword) {
-                    //Save User Details
-                    saveUserDetails(userData, currentActivity)
-                    UserDetails.saveUserLoginStatus(currentActivity,true)
+                OutlinedTextField(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    value = accPassword,
+                    onValueChange = { accPassword = it },
+                    visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                    trailingIcon = {
+                        val image = if (passwordVisible)
+                            Icons.Filled.Visibility
+                        else Icons.Filled.VisibilityOff
 
-                    onLoginSuccess.invoke()
+                        val description = if (passwordVisible) "Hide password" else "Show password"
 
-                    Toast.makeText(currentActivity, "Login successful", Toast.LENGTH_SHORT).show()
-                } else {
-                    Toast.makeText(currentActivity, "You Entered Wrong Password", Toast.LENGTH_SHORT).show()
+                        IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                            Icon(imageVector = image, description)
+                        }
+                    }
+                )
+
+                Spacer(modifier = Modifier.height(36.dp))
+
+                Button(
+                    onClick = {
+                        when {
+                            accEmail.isEmpty() -> {
+                                Toast.makeText(context, " Please Enter Mail", Toast.LENGTH_SHORT)
+                                    .show()
+                            }
+
+                            accPassword.isEmpty() -> {
+                                Toast.makeText(
+                                    context,
+                                    " Please Enter Password",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+
+                            else -> {
+
+                               //login firebase function
+                            }
+
+                        }
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    shape = RoundedCornerShape(8.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = colorResource(id = R.color.p2),
+                        contentColor = colorResource(id = R.color.white)
+                    )
+                ) {
+                    Text("Continue")
                 }
-            } else {
-                Toast.makeText(currentActivity, "We don't have your details! Register Now", Toast.LENGTH_SHORT).show()
             }
-        } else {
-            Toast.makeText(
-                currentActivity,
-                "Task Failed",
-                Toast.LENGTH_SHORT
-            ).show()
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            Text(
+                text = "Forgot Password?",
+                color = colorResource(id = R.color.p3),
+                modifier = Modifier
+                    .align(alignment = Alignment.CenterHorizontally)
+                    .clickable {
+                        navController.navigate(AppRoutes.ForgotPassword.route)
+                    }
+            )
+
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            Row(
+                modifier = Modifier.align(alignment = Alignment.CenterHorizontally)
+            ) {
+                Text(
+                    text = "Not a member yet? ",
+                    color = colorResource(id = R.color.p1),
+                    style = MaterialTheme.typography.bodyLarge,
+                )
+
+                Text(
+                    text = "Join now",
+                    color = colorResource(id = R.color.p3),
+                    style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Black),
+                    modifier = Modifier.clickable {
+
+                        navController.navigate(AppRoutes.Register.route)
+
+                    }
+                )
+
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+
         }
     }
-}
 
-fun saveUserDetails(user: UserData, currentActivity: Context) {
-    UserDetails.saveUserLoginStatus(currentActivity = currentActivity, true)
-    UserDetails.saveName(currentActivity, user.fullName)
-    UserDetails.saveGender(currentActivity,user.gender)
-    UserDetails.saveEmail(currentActivity, user.email)
 }
 
