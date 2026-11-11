@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,7 +15,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
@@ -57,7 +60,8 @@ fun SignUpScreenPreview() {
 @Composable
 fun SignUpScreen(navController: NavHostController) {
     var accName by remember { mutableStateOf("") }
-    var accPlace by remember { mutableStateOf("") }
+    var accCountry by remember { mutableStateOf("") }
+    var accPreferredTravelType by remember { mutableStateOf("") }
 
     var accEmail by remember { mutableStateOf("") }
     var accPassword by remember { mutableStateOf("") }
@@ -104,6 +108,7 @@ fun SignUpScreen(navController: NavHostController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .verticalScroll(rememberScrollState())
             .background(color = colorResource(id = R.color.white)),
     ) {
 
@@ -112,7 +117,7 @@ fun SignUpScreen(navController: NavHostController) {
 //            horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            Spacer(modifier = Modifier.height(100.dp))
+            Spacer(modifier = Modifier.height(25.dp))
 
             Text(
                 text = "Register",
@@ -125,7 +130,7 @@ fun SignUpScreen(navController: NavHostController) {
                 text = "Hello, Welcome Back!",
                 color = colorResource(id = R.color.p1),
                 style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.padding(bottom = 32.dp).align(Alignment.CenterHorizontally)
+                modifier = Modifier.padding(bottom = 12.dp).align(Alignment.CenterHorizontally)
             )
 
             Column(
@@ -170,7 +175,7 @@ fun SignUpScreen(navController: NavHostController) {
                 Spacer(Modifier.height(6.dp))
 
                 Text(
-                    text = "Place",
+                    text = "Country",
                     color = colorResource(id = R.color.black),
                     style = MaterialTheme.typography.bodyMedium,
                 )
@@ -179,10 +184,27 @@ fun SignUpScreen(navController: NavHostController) {
                 OutlinedTextField(
                     modifier = Modifier
                         .fillMaxWidth(),
-                    value = accPlace,
-                    onValueChange = { accPlace = it }
+                    value = accCountry,
+                    onValueChange = { accCountry = it }
+                )
+
+                Spacer(Modifier.height(6.dp))
+
+                Text(
+                    text = "Preferred Travel Type",
+                    color = colorResource(id = R.color.black),
+                    style = MaterialTheme.typography.bodyMedium,
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+
+                OutlinedTextField(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    value = accPreferredTravelType,
+                    onValueChange = { accPreferredTravelType = it }
                 )
                 Spacer(modifier = Modifier.height(8.dp))
+
 
                 Text(
                     text = "Email",
@@ -240,8 +262,12 @@ fun SignUpScreen(navController: NavHostController) {
                                 Toast.makeText(context, " Please Select DOB", Toast.LENGTH_SHORT).show()
                             }
 
-                            accPlace.isEmpty() -> {
-                                Toast.makeText(context, " Please Enter Place", Toast.LENGTH_SHORT).show()
+                            accCountry.isEmpty() -> {
+                                Toast.makeText(context, " Please Enter Country", Toast.LENGTH_SHORT).show()
+                            }
+
+                            accPreferredTravelType.isEmpty() -> {
+                                Toast.makeText(context, " Please Enter Preferred Travel Type", Toast.LENGTH_SHORT).show()
                             }
 
                             accEmail.isEmpty() -> {
@@ -264,7 +290,7 @@ fun SignUpScreen(navController: NavHostController) {
                         .fillMaxWidth(),
                     shape = RoundedCornerShape(8.dp),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = colorResource(id = R.color.p2),
+                        containerColor = colorResource(id = R.color.p3),
                         contentColor = colorResource(id = R.color.white)
                     )
                 ) {
@@ -274,7 +300,7 @@ fun SignUpScreen(navController: NavHostController) {
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            Spacer(modifier = Modifier.weight(1f))
+//            Spacer(modifier = Modifier.weight(1f))
 
             Row(
                 modifier = Modifier.align(alignment = Alignment.CenterHorizontally)

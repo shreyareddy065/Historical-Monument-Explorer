@@ -28,6 +28,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -94,10 +95,12 @@ fun SplashScreenDesign() {
             Spacer(modifier = Modifier.height(100.dp))
 
             Text(
-                text = "Historic Monument Explorer",
+                text = "Historic Monument\nExplorer",
                 color = colorResource(id = R.color.p1),
                 style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold),
+                textAlign = TextAlign.Center,
                 modifier = Modifier.padding(bottom = 4.dp)
+
             )
 
 

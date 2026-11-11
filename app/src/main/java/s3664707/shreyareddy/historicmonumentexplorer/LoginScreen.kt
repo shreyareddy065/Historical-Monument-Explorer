@@ -1,7 +1,9 @@
 package s3664707.shreyareddy.historicmonumentexplorer
 
+import android.R.attr.contentDescription
 import kotlin.jvm.java
 import android.widget.Toast
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -12,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
@@ -32,6 +35,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -68,8 +72,15 @@ fun LoginScreen(navController: NavHostController) {
             modifier = Modifier.padding(16.dp),
 //            horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            Spacer(modifier = Modifier.height(20.dp))
 
-            Spacer(modifier = Modifier.height(100.dp))
+            Image(
+                modifier = Modifier.size(150.dp, 150.dp)
+                    .align(alignment = Alignment.CenterHorizontally),
+                painter = painterResource(id = R.drawable.app_icon),
+                contentDescription = "App Icon",
+            )
+            Spacer(modifier = Modifier.height(25.dp))
 
             Text(
                 text = "Login",
@@ -176,7 +187,7 @@ fun LoginScreen(navController: NavHostController) {
                         .fillMaxWidth(),
                     shape = RoundedCornerShape(8.dp),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = colorResource(id = R.color.p2),
+                        containerColor = colorResource(id = R.color.p3),
                         contentColor = colorResource(id = R.color.white)
                     )
                 ) {
@@ -188,7 +199,7 @@ fun LoginScreen(navController: NavHostController) {
 
             Text(
                 text = "Forgot Password?",
-                color = colorResource(id = R.color.p3),
+                color = colorResource(id = R.color.p2),
                 modifier = Modifier
                     .align(alignment = Alignment.CenterHorizontally)
                     .clickable {
