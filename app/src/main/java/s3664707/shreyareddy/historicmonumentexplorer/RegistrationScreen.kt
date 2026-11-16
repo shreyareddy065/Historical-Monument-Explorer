@@ -1,7 +1,10 @@
 package s3664707.shreyareddy.historicmonumentexplorer
 
 
+import android.R.attr.password
 import android.app.DatePickerDialog
+import android.content.Context
+import android.text.TextUtils.replace
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -38,6 +41,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.text.font.FontVariation.weight
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -69,6 +73,8 @@ fun SignUpScreen(navController: NavHostController) {
     val context = LocalContext.current.findActivity()
 
     val context1 = LocalContext.current
+
+
 
     var passwordVisible by remember { mutableStateOf(false) }
 
@@ -281,7 +287,16 @@ fun SignUpScreen(navController: NavHostController) {
 
                             else -> {
 
-                              //register logic
+                                val travellerDetails = TravellerDetails(
+                                    accName,
+                                    dobDate,
+                                    accCountry,
+                                    accPreferredTravelType,
+                                    accEmail,
+                                    accPassword
+                                )
+                                registerUser(travellerDetails,context1,)
+
                             }
 
                         }
@@ -357,11 +372,45 @@ fun DOBDateField(label: String, value: String, onClick: () -> Unit) {
     }
 }
 
-data class AccountDetails
-    (
+
+fun registerUser(travellerDetails: TravellerDetails, context: Context,onRegistered: () -> Unit={}) {
+
+    val firebaseDatabase = FirebaseDatabase.getInstance()
+    val databaseReference = firebaseDatabase.getReference("UsersData")
+
+    databaseReference.child(travellerDetails.email.replace(".", ","))
+        .setValue(travellerDetails)
+        .addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                Toast.makeText(context, "You Registered Successfully", Toast.LENGTH_SHORT)
+                    .show()
+
+                onRegistered.invoke()
+
+            } else {
+                Toast.makeText(
+                    context,
+                    "Registration Failed",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+        .addOnFailureListener { _ ->
+            Toast.makeText(
+                context,
+                "Something went wrong",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+}
+
+
+data class TravellerDetails(
     var name: String = "",
     val dob: String = "",
-    var place: String ="",
+    var country: String ="",
+    var preferredTravelType: String ="",
     var email: String ="",
     var password: String ="",
 )
+
